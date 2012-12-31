@@ -1,0 +1,14 @@
+#!/usr/bin/php
+<?
+function mac2int($mac) {
+        $parts = split('[^0-9A-Fa-f]', $mac);
+        //$parts =  $mac;
+        foreach ($parts as $id=>&$part) {
+                $part = hexdec($part);
+        }
+        return implode('.', $parts);
+}
+
+print $parts;
+$needle = mac2int($argv[1]);
+print $needle;

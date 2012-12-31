@@ -1,0 +1,58 @@
+#!/usr/bin/php
+<?
+/*
+
+	Skrypt pokazuje liste lockoutow switcha.
+
+	Wywolanie: ./show-lockoutmac.php 1
+	(gdzie 1 to parametr wywolania w postaci numeru switcha - X.Y)
+	
+	Marek 'oczek' Oszczapiński <oczek@oczek.com>
+*/
+
+function mac2int($mac) {
+        $parts = split('[^0-9A-Fa-f]', $mac);
+        foreach ($parts as $id=>&$part) {
+                $part = dechex($part);
+        }
+        return implode('.', $parts);
+}
+
+$community = 'public';
+$argumenty = count ($argv);
+$oid = ".iso.org.dod.internet.mgmt.mib-2.17.7.1.3.1.1.4.4095 -O u";
+$switchip = "10.0."."$argv[1]";
+
+if ($argumenty !=2) {
+	echo "zła ilość argumentów";
+	echo "\n";
+}
+
+$mac2 = shell_exec("snmpwalk -v 2c -c $community $switchip $oid | cut -d . -f9,10,11,12,13,14");
+
+$needle = mac2int($mac2);
+
+$tablica = strlen($needle);
+$tablica--;
+$licznik = 0;
+
+for ($i = 0 ; $i < $tablica ; $i++) {
+	if ( "$needle[$i]" == "." ) {
+		$licznik++;
+	}
+
+	if ( $licznik == 6) {
+		echo "\n";
+		$licznik = 0;
+		continue;
+	}
+	if ( "$needle[$i]" == "." ) {
+		$needle[$i] = ":";
+	}
+	
+	echo "$needle[$i]";
+}
+echo "\n";
+
+exit;
+

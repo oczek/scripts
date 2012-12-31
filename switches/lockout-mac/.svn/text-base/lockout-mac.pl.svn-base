@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+
+#	show-info.pl
+#	Skrypt pokazuje informacje o switchu.
+
+#	Wywolanie: ./show-info.pl  
+#
+#	by Marek 'oczek' Oszczapiński <oczek@oczek.com>
+#
+
+use SNMP '5.0.2.pre' || die("Cannot load module\n");
+#use NET::SNMP;
+use warnings;
+use PHP::Include;
+
+print "Podaj IP switcha: ";
+$IP = <STDIN>;
+print "Wybierz co chcesz zrobić, możliwe: \n 1) Zablokować MAC na switchu \n 2) Odblokować MAC na switchu \n 3) Sprawdzić Lockout-mac na switchu \n";
+$WYBOR = <STDIN>;
+
+if ( "$WYBOR" != "3" ) {
+	print "Podaj adres MAC: ";
+	my $MAC = <STDIN>;
+}
+
+$MAC2 = include_php_vars( 'mac2int.php $MAC');
+
+$session = new SNMP::Session(
+		DestHost => $IP,
+		Community => 'DS-public',
+                Version => 2,
+                Timeout => 100000,
+                Retries => 1);
+
+#die "session creation error: $SNMP::Session::ErrorStr" unless (defined $session);
+
+if ( "$WYBOR" == 1 ) {
+$varbz = new SNMP::Varbind(['1.3.6.1.2.1.17.7.1.3.1.1.4.4095.$MAC2.0'] ); 	#blokujemy
+}
+elsif ( "$WYBOR" == 2 ) {
+$varbo = new SNMP::Varbind(['1.3.6.1.2.1.17.7.1.3.1.1.4.4095.$MAC2.0'] );				#odblokujemy
+}
+elsif ( "$WYBOR" == 3 ) {
+$vars = new SNMP::VarList(['1.3.6.1.2.1.17.7.1.3.1.1.4.4095.$MAC2.0'] ); 				#sprawdzamy
+}
+
+my @SETz = $session->getnext($varbz);
+my @SETo = $session->getnext($varbo);
+my @LIST = $session->getnext($vars);
+
+if ( "$WYBOR" == '1' ) {
+    print "Zablokowany: $SET[0] \n";
+}
+elsif ( "$WYBOR" == '2' ) {
+    print "Odblokowany: $SET[1] \n";
+}
+elsif ( "$WYBOR" == '3' ) {
+    print "Zablokowane MACi: $LIST[0] \n";
+}

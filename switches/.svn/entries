@@ -1,0 +1,123 @@
+10
+
+dir
+4
+http://svn.ds.pg.gda.pl/svn/switches
+http://svn.ds.pg.gda.pl/svn/switches
+
+
+
+2010-07-27T22:22:56.505370Z
+4
+oczek
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+69aaf973-72e5-4111-ae9b-2390cc0ce2ed
+
+block-ports
+dir
+
+uptime
+dir
+
+switches.pl
+file
+
+
+
+
+2010-07-27T22:23:31.024589Z
+39f6216e84324e64155b43702163a86e
+2010-07-27T22:22:56.505370Z
+4
+oczek
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+21024
+
+name-ports
+dir
+
+status-port
+dir
+
+show-alias
+dir
+
+backup-php
+dir
+
+switche.php
+file
+
+
+
+
+2010-07-23T19:55:24.071978Z
+72f3195e756735360954992e83f10a68
+2010-07-20T06:12:53.797282Z
+1
+oczek
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2417
+
+find-mac
+dir
+
+lockout-mac
+dir
+
+show-mac
+dir
+

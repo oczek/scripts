@@ -1,0 +1,41 @@
+#!/usr/bin/php
+<?
+/*
+
+	Skrypt zakladajacy lockout-a na switchu.
+
+	Wywolanie: ./lockout-mac.php 1 2
+	(gdzie 1 to parametr wywolania w postaci numeru switcha -XY, a 2 to mac-address w postaci XX:xx:XX:xx:XX:xx)
+
+	by Marek 'oczek' Oszczapiński <oczek@oczek.com>
+*/
+
+$community = 'DS-admin';
+$argumenty = count ($argv);
+$switchip = "10.90.90."."$argv[1]";
+
+
+if ($argumenty !=3) {
+        echo "zła ilość argumentów";
+        echo "\n";
+} 
+else {
+
+function mac2int($mac) {
+        $parts = split('[^0-9A-Fa-f]', $mac);
+        //$parts =  $mac;
+        foreach ($parts as $id=>&$part) {
+                $part = hexdec($part);
+        }
+        return implode('.', $parts);
+}
+
+$needle = mac2int($argv[2]);
+
+$oid = 'mib-2.17.7.1.3.1.1.4.4095.'."$needle".".0";
+
+echo "$needle\n";
+	$lockoutMac = @snmpset($switchip , $community , $oid , "i" , "3");
+        echo "\nLockout Mac: $argv[2]";
+	echo "\n";
+}
